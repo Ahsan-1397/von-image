@@ -17,7 +17,7 @@ VERSIONS = {
         "version": "node-1.12-6",
         "args": {
             # 1.16.0 release
-            "indy_sdk_url": "https://codeload.github.com/hyperledger/indy-sdk/tar.gz/b4b330ef326958d593ab42e25679c2dcd655494c",
+            "indy_sdk_url": "https://github.com/Ahsan-1397/indy-sdk/archive/refs/tags/1.16.0.tar.gz",
             # 0.3.2
             "ursa_url": "https://codeload.github.com/hyperledger/ursa/tar.gz/394bcdf1413ac41793e96175d46d745ed6ffd970",
             "rocksdb_lib_ver":"5.8.fb",
@@ -110,6 +110,10 @@ build_args.update(ver["args"])
 build_args["python_version"] = py_ver
 build_args["tag_name"] = tag_name
 build_args["tag_version"] = tag_version
+
+if args.platform:
+    build_args["platform"] = args.platform
+
 if not args.debug:
     build_args["indy_build_flags"] = "--release"
 if args.build_arg:
@@ -151,7 +155,7 @@ if args.platform:
     cmd_args.extend(["--platform", args.platform])
 
 cmd_args.append(target)
-cmd = ["docker", "build"] + cmd_args
+cmd = ["docker", "buildx" , "build"] + cmd_args
 
 if args.dry_run:
     print(" ".join(cmd))
@@ -194,22 +198,31 @@ if args.s2i:
             print("Successfully tagged {}".format(s2i_tag))
 
 if not args.dry_run:
-    if args.test or args.push:
+    if args.test:
+        #or args.push:
+        # error is thrown, when image is not in repo
         test_path = target + "/Dockerfile.test"
         test_tag = tag + "-test"
-        proc_bt = subprocess.run(
-            [
-                "docker",
-                "build",
-                "--build-arg",
-                "base_image=" + tag,
-                "-t",
-                test_tag,
-                "-f",
-                test_path,
-                target,
-            ]
-        )
+
+        cmd_test_args = []
+        if args.platform:
+            cmd_test_args.extend(["--platform", args.platform])
+
+        cmd_args = []
+        #for k, v in build_args.items():
+        cmd_args.extend(["--build-arg", "base_image=" + tag])
+        cmd_args.extend(["-t", test_tag])
+        cmd_args.extend(["-f", test_path])
+
+        if args.platform:
+            cmd_args.extend(["--platform", args.platform])
+
+        cmd_args.append(target)
+        cmd_test = [
+            "docker",  
+            "build"] + cmd_args
+
+        proc_bt = subprocess.run(cmd_test)        
         if proc_bt.returncode:
             print("test image build failed")
             sys.exit(1)
