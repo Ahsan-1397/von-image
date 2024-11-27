@@ -17,7 +17,7 @@ VERSIONS = {
         "version": "node-1.12-6",
         "args": {
             # 1.16.0 release
-            "indy_sdk_url": "https://github.com/Ahsan-1397/indy-sdk/archive/refs/tags/1.16.0.tar.gz",
+            "indy_sdk_url": "https://codeload.github.com/Ahsan-1397/indy-sdk/tar.gz/4cbeb16",
             # 0.3.2
             "ursa_url": "https://codeload.github.com/hyperledger/ursa/tar.gz/394bcdf1413ac41793e96175d46d745ed6ffd970",
             "rocksdb_lib_ver":"5.8.fb",
