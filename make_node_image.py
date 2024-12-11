@@ -155,7 +155,7 @@ if args.platform:
     cmd_args.extend(["--platform", args.platform])
 
 cmd_args.append(target)
-cmd = ["docker", "buildx" , "build"] + cmd_args
+cmd = ["docker", "build"] + cmd_args
 
 if args.dry_run:
     print(" ".join(cmd))

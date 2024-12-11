@@ -5,6 +5,6 @@ base58~=1.0.0
 cchardet~=2.1.0
 rlp~=0.6.0
 cython==0.29.36
-python-rocksdb==0.7.0
+git+https://github.com/Ahsan-1397/python-rocksdb.git@b9bc4aa#egg=python-rocksdb
 indy-node==1.12.6
 git+https://github.com/hyperledger/indy-plenum.git@0bbf5c84fc11290cee4272649eb8288de0fa756d#egg=indy-plenum
